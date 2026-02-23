@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	city := flag.String("city", "", "Город")
+	city := flag.String("city", "London", "Город")
 	format := flag.Int("format", 1, "Тип ответа")
 
 	flag.Parse()
