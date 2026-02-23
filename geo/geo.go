@@ -3,7 +3,7 @@ package geo
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
+	"errors"
 	"io"
 	"net/http"
 )
@@ -16,20 +16,22 @@ type CityPopulationResponce struct {
 	Error bool `json:"error"`
 }
 
+var ErrorNoCity = errors.New("NOCITY")
+var ErrorNot200 = errors.New("NOT200")
+
 func GetMyLocation(city string) (*GeoData, error){
 
 	if city != ""{
 		isCity := CheckCity(city)
 		if !isCity{
-			panic("Нет такого города")
+			return nil, ErrorNoCity
 		}
 		return &GeoData{City: city}, nil
 	}
 
 	resp, err := http.Get("https://ipapi.co/json/")
 	if err != nil {
-		fmt.Println(err)
-		return nil, err
+		return nil, ErrorNot200
 	}
 	defer resp.Body.Close()
 
